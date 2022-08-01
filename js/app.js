@@ -1,5 +1,5 @@
 var game = false;
-
+var colors = ["red","green","blue","yellow"];
 var rndmPattern = [];
 var gamePattern = [];
 
@@ -10,48 +10,37 @@ $(document).keydown(function () {
     startGame();
   }
 });
+//adding the event listeners
+$(".btn").mousedown(function (e) {
+  //adding the click effect on the buttons
+  if(game){
+    $(`#${e.target.id}`).addClass("pressed");
+    setTimeout(function(){
+      $(`#${e.target.id}`).removeClass("pressed");
+    },100)
+    //playing audio for each button
+    var audio = new Audio(`sounds/${e.target.id}.mp3`);
+    audio.play();
+    //checking the input
+    check(e.target.id);
+  }
+});
 
 function startGame() {
   //resetting values
   rndmPattern = [];
   gamePattern = [];
   game = true;
-  //adding the event listeners
-  $(".btn").mousedown(function (e) {
-    //adding the click effect on the buttons
-    $(`#${e.target.id}`).addClass("pressed");
-    setTimeout(function(){
-      $(`#${e.target.id}`).removeClass("pressed");
-    },100)
-
-    //playing audio for each button
-    var audio = new Audio(`sounds/${e.target.id}.mp3`);
-    audio.play();
-    //checking the input
-    check(e.target.id);
-  });
   //starting the game
   nextLevel();
 }
 function nextLevel() {
+  gamePattern = [];
   $("#level-title").text("Level " + (rndmPattern.length + 1));
   //generating a random color
   var random = Math.floor(Math.random() * 4);
   //choosing the color to add to the random color list
-  switch (random) {
-    case 0:
-      highlight("green");
-      break;
-    case 1:
-      highlight("red");
-      break;
-    case 2:
-      highlight("yellow");
-      break;
-    case 3:
-      highlight("blue");
-      break;
-  }
+  highlight(colors[random]);
 }
 
 function highlight(color) {
@@ -70,17 +59,13 @@ function check(color) {
   //index as the random color list
   if (gamePattern[length] != rndmPattern[length]) {
     gameOver();
-  } else {
+  } else if (gamePattern.length == rndmPattern.length) {
     //checking if the round is done
-    if (gamePattern.length == rndmPattern.length) {
-      setTimeout(function(){
-        gamePattern = [];
+      setTimeout(function(){    
         nextLevel();
-
-      },1000)
+      },500)
     }
-
-  }
+  
 }
 
 function gameOver() {
@@ -89,33 +74,11 @@ function gameOver() {
   //playing game over audio
   var audio = new Audio("sounds/wrong.mp3");
   audio.play();
-
+  //reset game state
   game = false;
   //flashing the background for game over
   $("body").addClass("game-over");
   setTimeout(function () {
     $("body").removeClass("game-over");
   }, 100);
-  //remove the event listeners
-  $(".btn").unbind("mousedown");
 }
-
-//----------------UNUSED CODE----------------//
-
-// function addRandom() {
-//   var random = Math.floor(Math.random() * 4);
-//   switch (random) {
-//     case 0:
-//       highlight("green");
-//       break;
-//     case 1:
-//       highlight("red");
-//       break;
-//     case 2:
-//       highlight("yellow");
-//       break;
-//     case 3:
-//       highlight("blue");
-//       break;
-//   }
-// }

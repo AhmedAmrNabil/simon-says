@@ -1,6 +1,7 @@
 body {
   text-align: center;
-  background-color: #011F3F;
+  background-color: #1e1e1e;
+  height: 100%;
 }
 
 #level-title {
@@ -11,19 +12,20 @@ body {
 }
 
 .container {
+  user-select: none;
   display: block;
-  width: 50%;
+  width: 65%;
   margin: auto;
 
 }
 
 .btn {
-  margin: 25px;
+  margin: 20px;
   display: inline-block;
   height: 200px;
   width: 200px;
   border: 10px solid black;
-  border-radius: 20%;
+  border-radius: 15%;
 }
 
 .game-over {
@@ -32,19 +34,19 @@ body {
 }
 
 .red {
-  background-color: red;
+  background-color: #F25022;
 }
 
 .green {
-  background-color: green;
+  background-color: #7FBA00;
 }
 
 .blue {
-  background-color: blue;
+  background-color: #00A4EF;
 }
 
 .yellow {
-  background-color: yellow;
+  background-color: #FFB900;
 }
 
 .pressed {

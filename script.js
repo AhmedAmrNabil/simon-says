@@ -4,6 +4,7 @@ let userArray = [];
 let gameRunning = false;
 let currentStep = 0;
 let title = $("#level-title");
+
 $(document).on("keydown", (e) => {
   if (gameRunning) return;
   gameRunning = true;
@@ -20,18 +21,25 @@ buttons.click((e) => {
   userArray[currentStep] = e.target.dataset.val;
   if (userArray[currentStep] == gameArray[currentStep]) {
     currentStep++;
-  }else{
-	loseScreen();
+  } else {
+    gameOver();
   }
   if (currentStep == gameArray.length) {
-    levelUp();
+    setTimeout(function () {
+      levelUp();
+    }, 500);
   }
-  let button = $(e.target);
-  button.addClass("pressed");
-  setTimeout(()=>{
-	  button.removeClass("pressed");
-  },100);
+  animatePress($(e.target));
+
+  playAudio(e.target.id);
 });
+
+function animatePress(button) {
+  button.addClass("pressed");
+  setTimeout(() => {
+    button.removeClass("pressed");
+  }, 100);
+}
 
 function levelUp() {
   currentStep = 0;
@@ -42,17 +50,23 @@ function levelUp() {
 }
 
 function addRandomSequence() {
-  gameArray.push(Math.floor(Math.random() * 4));
-  buttons
-    .eq(gameArray[gameArray.length - 1])
-    .fadeOut()
-    .fadeIn();
+  let randomNum = Math.floor(Math.random() * 4);
+  gameArray.push(randomNum);
+  buttons.eq(randomNum).fadeOut().fadeIn();
+  playAudio(buttons[randomNum].id);
 }
-function loseScreen(){
-	$("body").addClass("game-over");
-	setTimeout(()=>{
-		$("body").removeClass("game-over");
-	},200)
-	gameRunning = false;
-	title.text("Game Over, Press any key to Restart");
+
+function gameOver() {
+  $("body").addClass("game-over");
+  setTimeout(() => {
+    $("body").removeClass("game-over");
+  }, 200);
+  gameRunning = false;
+  title.text("Game Over, Press any key to Restart");
+  playAudio("wrong");
+}
+
+function playAudio(soundName){
+  var audio = new Audio(`./sounds/${soundName}.mp3`);
+  audio.play();
 }
